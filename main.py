@@ -28,7 +28,11 @@ def find_file(ORIGIN_PATH, remove_file_path):
             full_fname = os.path.join(root, fname)
             if cmp(full_fname, remove_file_path):
                 logger.info("  [+] Match: " + str(full_fname))
-                shutil.move(remove_file_path, TRASH)
+                try:
+                    shutil.move(remove_file_path, TRASH)
+                except Exception as e:
+                    logging.exception(e)
+
                 return True
     return False
 
@@ -41,5 +45,8 @@ for root, dirs, files in os.walk(REMOVE_PATH):
             print("=============== OK... Find! ===============")
         else:
             logger.info("  [-] Not Found!")
-            shutil.move(full_fname, NEED_CHECK)
+            # try:
+            #     shutil.move(full_fname, NEED_CHECK)
+            # except Exception as e:
+            #     logging.exception(e)
         check_num += 1
